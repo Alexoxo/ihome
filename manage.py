@@ -4,6 +4,8 @@ from flask import Flask, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
 from flask_session import Session
+from flask_script import Manager  # 通过脚本的方式runserver来启动项目
+from flask_migrate import Migrate, MigrateCommand  # 通过迁移模型类的方式管理数据库表
 
 
 class Config(object):
@@ -39,6 +41,11 @@ CSRFProtect(biu)
 # session信息存储
 Session(biu)
 
+# 创建Manager管理对象
+manager = Manager(biu)  # 可以通过python manage.py runserver启动项目
+Migrate(biu, d_base)
+manager.add_command("m_db", MigrateCommand)  # 参数：name, command 添加迁移命令
+
 
 @biu.route('/')
 def index():
@@ -48,4 +55,4 @@ def index():
 
 if __name__ == '__main__':
     # 运行开发web服务器
-    biu.run()
+    manager.run()
