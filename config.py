@@ -18,3 +18,26 @@ class Config(object):
     SESSION_REDIS = redis.StrictRedis(host=REDIS_HOST, port=REDIS_PORT)
     SESSION_USE_SIGNER = True  # 开启session签名加密
     PERMANENT_SESSION_LIFETIME = 86400 * 2  # 设置session过期时间(秒) 默认31天
+
+
+class DevelopmentConfig(Config):
+    """开发环境配置类"""
+    DEBUG = True
+
+
+class ProductionConfig(Config):
+    """生产环境配置类"""
+    SQLALCHEMY_DATABASE_URI = "mysql://root:password@127.0.0.1:3306/ihome"
+
+
+class TestingConfig(Config):
+    """测试环境配置类"""
+    TESTING = True  # 开启测试标志
+    SQLALCHEMY_DATABASE_URI = "mysql://root:password@127.0.0.1:3306/ihome_testcase"
+
+
+config_dic = {
+    "development": DevelopmentConfig,
+    "production": ProductionConfig,
+    "testing": TestingConfig
+}
